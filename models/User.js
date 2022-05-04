@@ -26,8 +26,25 @@ const userSchema = new Schema(
               ref: 'User',
             },
         ],
+        
     },
-)
+    {
+        toJSON: {
+            getters: true,
+            virtuals: true,
+        },
+    }
+);
+
+
+userSchema
+.virtual('friendCount')
+.get(function () {
+    return `${this.username}`
+})
+.set(function () {
+    this.set({ username })
+})
 
 
 const User = model('user', userSchema);
