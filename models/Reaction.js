@@ -7,7 +7,7 @@ const reactionSchema = new Schema(
             required: true,
         },
         reactionBody: {
-            type: Date,
+            type: String,
             maxlength: 280,
             minlength: 1,
             default: Date.now,
@@ -28,3 +28,5 @@ const reactionSchema = new Schema(
     },
     },
 );
+
+module.exports = reactionSchema;

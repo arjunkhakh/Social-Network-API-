@@ -30,13 +30,13 @@ const thoughtSchema = new Schema(
 thoughtSchema
 .virtual('reactionCount')
 .get(function () {
-    return reactions;
+    return this.reactions.length;
 })
 .set(function () {
     this.set({ reactions });
 })
 
 
-const Thought = model('thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;

@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const { Thought } = require('../../models/Thought');
+const Thought = require('../../models/Thought');
 
 
 // /api/thoughts
 router.get('/', (req, res) => {
-    Thought.findAll()
+    Thought.find()
       .then((userData) => res.json(userData))
       .catch((err) => {
         res.status(500).json(err);
@@ -13,11 +13,7 @@ router.get('/', (req, res) => {
 
 // /api/thoughts/:_id
 router.get('/_id', (req, res) => {
-    Thought.findOne({
-        where: {
-            _id: req.body._id,
-        },
-    })
+    Thought.findOne({ _id: req.params._id, })
       .then((userData) => res.json(userData))
       .catch((err) => {
         res.status(500).json(err);
@@ -36,28 +32,16 @@ router.post('/', async (req, res) => {
     //     res.status(400).json(err);
     //   }
 
-    Thought.create({
-        thoughtText: req.body.thoughtText,
-        username: req.body.username,
-        userId: req.body._id,
-      })
-        .then((userData) => {
-          req.session.save(() => {
-            req.session.userId = userData._id;
-            req.session.username = userData.username;
-            req.session.thoughtText = userData.thoughtText;
-    
-            res.json(userData);
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).json(err);
-        });
+    Thought.create(req.body)
+    .then((userData) => res.json(userData))
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json(err);
+    });
 })
 
 router.put("/:_id", (req, res) => {
-    Thought.update(req.body, {
+    Thought.updateOne(req.body, {
       where: {
         _id: req.params.id,
       },
@@ -76,7 +60,7 @@ router.put("/:_id", (req, res) => {
   });
   
   router.delete("/:_id", (req, res) => {
-    Thought.destroy({
+    Thought.findOneAndDelete({
       where: {
         _id: req.params._id,
       },
