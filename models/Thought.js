@@ -8,15 +8,18 @@ const thoughtSchema = new Schema(
             required: true,
         },
         createdAt: {
-            type: Date,
+            type: String,
             maxlength: 280,
             minlength: 1,
             default: Date.now,
+            get: (createdAtVal) =>
+            moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
         },
-        createdAt: {
+        username: {
             type: String,
             required: true,
-        },
+            ref: "user",
+          },
         reactions: [reactionSchema],
     },
     {

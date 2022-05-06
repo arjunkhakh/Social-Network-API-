@@ -15,11 +15,13 @@ const reactionSchema = new Schema(
         username: {
             type: String,
             required: true,
-        },
+            ref: "user",
+          },
         createdAt:{ 
             type: Date,
             default: Date.now,
-            // create getter method
+            get: (createdAtVal) =>
+            moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
         },
     },
     {

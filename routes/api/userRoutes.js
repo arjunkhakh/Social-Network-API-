@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 // /api/users/:_id
-router.get('/id', (req, res) => {
+router.get('/:id', (req, res) => {
     // User.findOne({
     //     where: {
     //         _id: req.body._id,

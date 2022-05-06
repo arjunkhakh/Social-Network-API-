@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 // /api/thoughts/:_id
-router.get('/_id', (req, res) => {
+router.get('/:id', (req, res) => {
     Thought.findOne({ _id: req.params._id, })
       .then((userData) => res.json(userData))
       .catch((err) => {
