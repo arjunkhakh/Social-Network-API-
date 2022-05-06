@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Thought } = require('../../models/');
+const { Thought } = require('../../models/Thought');
 
 
 // /api/thoughts
@@ -93,3 +93,5 @@ router.put("/:_id", (req, res) => {
         res.status(500).json(err);
       });
   });
+
+  module.exports = router;
