@@ -92,7 +92,7 @@ router.put("/:id", (req, res) => {
 
   // /api/users/:userId/friends/:friendId
 
-router.post('/:userId/friends/:friendId', (req, res) => {
+router.post('/:id/friends/:friendId', (req, res) => {
   User.findOneAndUpdate(
     { _id: req.params.id },
     { $addToSet: { friends: req.params.friendId } },
@@ -108,7 +108,7 @@ router.post('/:userId/friends/:friendId', (req, res) => {
     .catch((err) => res.status(400).json(err));
 })
 
-router.delete("/:userId/friends/:friendId", (req, res) => {
+router.delete("/:id/friends/:friendId", (req, res) => {
   User.findOneAndUpdate(
     { _id: req.params.id },
     { $pull: { friends: req.params.friendId } },

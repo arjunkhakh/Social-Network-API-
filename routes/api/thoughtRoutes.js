@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 // /api/thoughts/:_id
-router.get('/:id', (req, res) => {
+router.get('/:_id', (req, res) => {
     Thought.findOne({ _id: req.params._id, })
       .then((userData) => res.json(userData))
       .catch((err) => {
@@ -69,9 +69,9 @@ router.put("/:_id", (req, res) => {
   });
 
   // /api/thoughts/:thoughtId/reactions
-  router.post('/:thoughtId/reactions', async (req, res) => {
+  router.post('/:_id/reactions', async (req, res) => {
     Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
+      { _id: req.params._id },
       { $push: { reactions: req.body } },
       { new: true, runValidators: true }
     )
@@ -89,10 +89,10 @@ router.put("/:_id", (req, res) => {
       .catch((err) => res.status(400).json(err));
 })
 
-router.delete("/:thoughtId/reactions", (req, res) => {
+router.delete("/:_id/reactions", (req, res) => {
   Thought.findOneAndUpdate(
-    { _id: req.params.thoughtId },
-    { $pull: { reactions: { reactionId: req.params.reactionId } } },
+    { _id: req.params._id },
+    { $pull: { reactions: { id: req.params.id } } },
     { new: true }
   )
     .then((userData) => {
