@@ -43,7 +43,7 @@ router.get('/:id', (req, res) => {
 });
 
 // /api/users
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
     User.create(req.body)
     .then((userData) => res.json(userData))
     .catch((err) => {
@@ -89,5 +89,39 @@ router.put("/:id", (req, res) => {
         res.status(500).json(err);
       });
   });
+
+  // /api/users/:userId/friends/:friendId
+
+router.post('/:userId/friends/:friendId', (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $addToSet: { friends: req.params.friendId } },
+    { runValidators: true }
+  )
+    .then((userData) => {
+      if (!userData) {
+        res.status(404).json({ message: "No user found with this id!" });
+        return;
+      }
+      res.json(userData);
+    })
+    .catch((err) => res.status(400).json(err));
+})
+
+router.delete("/:userId/friends/:friendId", (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $pull: { friends: req.params.friendId } },
+    { runValidators: true }
+  )
+    .then((userData) => {
+      if (!userData) {
+        res.status(404).json({ message: "No user found with this id!" });
+        return;
+      }
+      res.json(userData);
+    })
+    .catch((err) => res.status(400).json(err));
+});
 
   module.exports = router;
