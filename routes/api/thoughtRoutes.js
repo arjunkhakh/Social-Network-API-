@@ -22,16 +22,6 @@ router.get('/:id', (req, res) => {
 
 // /api/thoughts
 router.post('/', async (req, res) => {
-    // try {
-    //     const newUser = await User.create({
-    //       username: req.session.username,
-    //       email: req.session.email,
-    //     });
-    //     res.status(200).json(newUser);
-    //   } catch (err) {
-    //     res.status(400).json(err);
-    //   }
-
     Thought.create(req.body)
     .then((userData) => res.json(userData))
     .catch((err) => {
@@ -77,5 +67,45 @@ router.put("/:_id", (req, res) => {
         res.status(500).json(err);
       });
   });
+
+  // /api/thoughts/:thoughtId/reactions
+  router.post('/:thoughtId/reactions', async (req, res) => {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $push: { reactions: req.body } },
+      { new: true, runValidators: true }
+    )
+      .populate({ path: "reactions", select: "-__v" })
+      .select("-__v")
+      .then((userData) => {
+        if (!userData) {
+          res
+            .status(404)
+            .json({ message: "No thoughts with this particular ID!" });
+          return;
+        }
+        res.json(userData);
+      })
+      .catch((err) => res.status(400).json(err));
+})
+
+router.delete("/:thoughtId/reactions", (req, res) => {
+  Thought.findOneAndUpdate(
+    { _id: req.params.thoughtId },
+    { $pull: { reactions: { reactionId: req.params.reactionId } } },
+    { new: true }
+  )
+    .then((userData) => {
+      if (!userData) {
+        res
+          .status(404)
+          .json({ message: "No thoughts with this particular ID!" });
+        return;
+      }
+      res.json(userData);
+    })
+    .catch((err) => res.status(400).json(err));
+});
+
 
   module.exports = router;
