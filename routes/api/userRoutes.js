@@ -1,8 +1,9 @@
+// Acquiring Express Router and the User Model
 const router = require('express').Router();
 const User = require('../../models/User');
 
-
 // /api/users
+// Getting All Users
 router.get('/', (req, res) => {
     User.find()
       .then((userData) => res.json(userData))
@@ -12,19 +13,8 @@ router.get('/', (req, res) => {
 });
 
 // /api/users/:_id
+// Getting One User By ID
 router.get('/:id', (req, res) => {
-    // User.findOne({
-    //     where: {
-    //         _id: req.body._id,
-    //         thoughts: req.body.thoughts,
-    //         friends: req.body.thoughts
-    //     },
-    // })
-    //   .then((userData) => res.json(userData))
-    //   .catch((err) => {
-    //     res.status(500).json(err);
-    //   });
-
     User.findOne({ _id: req.params.id })
     .populate("thoughts")
     .populate("friends")
@@ -43,6 +33,7 @@ router.get('/:id', (req, res) => {
 });
 
 // /api/users
+// Creating a New User
 router.post('/', (req, res) => {
     User.create(req.body)
     .then((userData) => res.json(userData))
@@ -52,6 +43,8 @@ router.post('/', (req, res) => {
     });
 })
 
+// /api/users/:_id
+// Updating a User by ID
 router.put("/:id", (req, res) => {
   User.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
@@ -67,7 +60,9 @@ router.put("/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
   });
   
-  router.delete("/:id", (req, res) => {
+// /api/users/:_id
+// Deleting a User by ID
+router.delete("/:id", (req, res) => {
     User.findOneAndDelete({
         _id: req.params.id,
     })
@@ -82,10 +77,10 @@ router.put("/:id", (req, res) => {
         console.log(err);
         res.status(500).json(err);
       });
-  });
+});
 
-  // /api/users/:userId/friends/:friendId
-
+// /api/users/:userId/friends/:friendId
+// Finding a Users ID and updating the friends array within the current user
 router.post('/:id/friends/:friendId', (req, res) => {
   User.findOneAndUpdate(
     { _id: req.params.id },
@@ -102,6 +97,8 @@ router.post('/:id/friends/:friendId', (req, res) => {
     .catch((err) => res.status(400).json(err));
 })
 
+// /api/users/:userId/friends/:friendId
+// Deleting A Friend from the friend array of the current user
 router.delete("/:id/friends/:friendId", (req, res) => {
   User.findOneAndUpdate(
     { _id: req.params.id },

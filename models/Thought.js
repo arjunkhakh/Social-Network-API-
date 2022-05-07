@@ -1,7 +1,8 @@
+// Acquiring Mongoose and The Reaction Schema for the model
 const { Schema, model } = require('mongoose');
-const moment = require("moment");
 const reactionSchema = require('./Reaction');
 
+// Thought Schema Model
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -13,8 +14,6 @@ const thoughtSchema = new Schema(
             maxlength: 280,
             minlength: 1,
             default: Date.now,
-            // get: (createdAtVal) =>
-            // moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
         },
         username: {
             type: String,
@@ -31,6 +30,7 @@ const thoughtSchema = new Schema(
     },
 );
 
+// Thought Schema Virtual for getting reactions array length
 thoughtSchema
 .virtual('reactionCount')
 .get(function () {
@@ -40,7 +40,7 @@ thoughtSchema
     this.set({ reactions });
 })
 
-
+// Creating the Model
 const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;

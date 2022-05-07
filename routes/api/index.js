@@ -1,3 +1,4 @@
+// Routes Index for /users and /thoughts
 const router = require("express").Router();
 
 const userController = require("./userRoutes");

@@ -1,8 +1,9 @@
+// Acquiring Express Router and the Thought Model
 const router = require('express').Router();
 const Thought = require('../../models/Thought');
 
-
 // /api/thoughts
+// Getting All Thoughts
 router.get('/', (req, res) => {
     Thought.find()
       .then((userData) => res.json(userData))
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 });
 
 // /api/thoughts/:_id
+// Getting A Single Thought By ID
 router.get('/:_id', (req, res) => {
     Thought.findOne({ _id: req.params._id, })
       .then((userData) => res.json(userData))
@@ -21,6 +23,7 @@ router.get('/:_id', (req, res) => {
 });
 
 // /api/thoughts
+// Creating A Thought
 router.post('/', async (req, res) => {
     Thought.create(req.body)
     .then((userData) => res.json(userData))
@@ -30,6 +33,8 @@ router.post('/', async (req, res) => {
     });
 })
 
+// /api/thoughts/:id
+// Updating The Thought by ID
 router.put("/:id", (req, res) => {
   Thought.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
@@ -45,6 +50,8 @@ router.put("/:id", (req, res) => {
     .catch((err) => res.status(400).json(err));
   });
   
+  // /api/thoughts/:id
+// Deleting The Thought by ID
   router.delete("/:id", (req, res) => {
     Thought.findOneAndDelete({
         _id: req.params.id,
@@ -63,6 +70,7 @@ router.put("/:id", (req, res) => {
   });
 
   // /api/thoughts/:thoughtId/reactions
+  // Finding a thought and updating the reactions array of the current thought
   router.post('/:_id/reactions', async (req, res) => {
     Thought.findOneAndUpdate(
       { _id: req.params._id },
@@ -83,6 +91,8 @@ router.put("/:id", (req, res) => {
       .catch((err) => res.status(400).json(err));
 })
 
+  // /api/thoughts/:thoughtId/reactions
+  // Deleting a thought's reactions from the array of the current thought
 router.delete("/:_id/reactions", (req, res) => {
   Thought.findOneAndUpdate(
     { _id: req.params._id },

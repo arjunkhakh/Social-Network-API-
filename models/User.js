@@ -1,5 +1,7 @@
+// Acquiring The Mongoose Package for the Model
 const { Schema, model } = require('mongoose');
 
+// User Schema Model
 const userSchema = new Schema(
     {
         username: {
@@ -36,7 +38,7 @@ const userSchema = new Schema(
     }
 );
 
-
+// UserSchema Virtual for getting the friend array list of usernames
 userSchema
 .virtual('friendCount')
 .get(function () {
@@ -46,7 +48,7 @@ userSchema
     this.set({ username })
 })
 
-
+// Creating the Model
 const User = model('User', userSchema);
 
 module.exports = User;
