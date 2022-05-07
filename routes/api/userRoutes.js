@@ -53,36 +53,30 @@ router.post('/', (req, res) => {
 })
 
 router.put("/:id", (req, res) => {
-    User.updateOne(req.body, {
-      where: {
-        _id: req.params.id,
-      },
+  User.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true,
+    runValidators: true,
+  })
+    .then((userData) => {
+      if (!userData) {
+        res.status(404).json({ message: "No user found with this id!" });
+        return;
+      }
+      res.json(userData);
     })
-      .then((userData) => {
-        if (!userData[0]) {
-          res.status(404).json({ message: "No user with this id found" });
-          return;
-        }
-        res.json(userData);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+    .catch((err) => res.status(400).json(err));
   });
   
   router.delete("/:id", (req, res) => {
     User.findOneAndDelete({
-      where: {
-        id: req.params._id,
-      },
+        _id: req.params.id,
     })
       .then((userData) => {
         if (!userData) {
           res.status(404).json({ message: "No user with this id found" });
           return;
         }
-        res.json(userData);
+        res.json({ message: "Deleted User" });
       })
       .catch((err) => {
         console.log(err);

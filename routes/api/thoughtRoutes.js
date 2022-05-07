@@ -30,37 +30,31 @@ router.post('/', async (req, res) => {
     });
 })
 
-router.put("/:_id", (req, res) => {
-    Thought.updateOne(req.body, {
-      where: {
-        _id: req.params.id,
-      },
+router.put("/:id", (req, res) => {
+  Thought.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true,
+    runValidators: true,
+  })
+    .then((userData) => {
+      if (!userData) {
+        res.status(404).json({ message: "No thought found with this id!" });
+        return;
+      }
+      res.json(userData);
     })
-      .then((userData) => {
-        if (!userData[0]) {
-          res.status(404).json({ message: "No Thought with this id found" });
-          return;
-        }
-        res.json(userData);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+    .catch((err) => res.status(400).json(err));
   });
   
-  router.delete("/:_id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     Thought.findOneAndDelete({
-      where: {
-        _id: req.params._id,
-      },
+        _id: req.params.id,
     })
       .then((userData) => {
         if (!userData) {
           res.status(404).json({ message: "No Thought with this id found" });
           return;
         }
-        res.json(userData);
+        res.json({ message: "Deleted Thought" });
       })
       .catch((err) => {
         console.log(err);
